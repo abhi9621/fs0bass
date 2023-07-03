@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>countries table</title>
+    <style>
+        /* body{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            
+
+
+        } */
+        table{
+            width: 100%;
+            /* border: 2px solid black; */
+            border-collapse: collapse;
+        }
+       th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+     #search-input {
+      margin-bottom: 10px;
+      /* padding: 2rem; */
+    }
+
+    </style>
+</head>
+<body>
+    <input type="text" id="search-input" placeholder="search country">
+    <table id="cats-table">
+        <tr>
+            <th>cat-name</th>
+            <th>capital</th>
+            <th>Languages</th>
+            <th>population</th>
+            <th>Area</th>
+        </tr>
+    </table>
+   <script>
+     const catsAPI = "https://api.thecatapi.com/v1/breeds";
+     fetch(catsAPI)
+     .then(response => response.json())
+     .then(data =>{
+        const table=document.getElementById('cats-table');
+        const searchInput=document.getElementById('search-input')
+        let catsData=data.slice(0,20)
+
+        const createTable = () =>{
+            table.innerHTML='';
+            countriesData.forEach(country => {
+                const row=document.createElement('tr');
+
+                const namecell =document.createElement('td');
+                namecell.textContent = country.name;
+                row.appendChild(namecell);
+
+                const capitalcell =document.createElement('td');
+                capitalcell.textContent = country.capital;
+                row.appendChild(capitalcell);
+                
+                const languagecell =document.createElement('td');
+                const languages = country.languages.map(lang => lang.name).join(', ');
+                languagecell.textContent = languages;
+                row.appendChild(languagecell);
+                
+                const populationcell =document.createElement('td');
+                populationcell.textContent = country.population;
+                row.appendChild(populationcell);
+                
+                const areacell =document.createElement('td');
+                areacell.textContent = country.area;
+                row.appendChild(areacell);
+
+                table.appendChild(row);
+
+                
+            });
+        };
+
+        const handlesearch=() =>{
+            const searchTerm= searchInput.value.toLowerCase();
+            countriesData = data.filter(country => {
+        return country.name.toLowerCase().includes(searchTerm);
+      });
+      createTable();
+        };
+      searchInput.addEventListener('input',handlesearch);
+
+      createTable();
+
+
+     })
+.catch(error=>console.log(error));
+
+   </script>
+</body>
+</html>
